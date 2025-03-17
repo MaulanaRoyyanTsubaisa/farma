@@ -13,6 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         //
+        return 'ini indexx';
     }
 
     /**
@@ -20,7 +21,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        // 
+        return 'royyan ni bos';
     }
 
     /**
