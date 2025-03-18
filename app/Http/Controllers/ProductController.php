@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,8 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return 'ini indexx';
+        return view('admin.products.index');
+
     }
 
     /**
@@ -21,8 +23,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        // 
-        return 'royyan ni bos';
+        //
+        $categories = Category::all();
+        return view('admin.categories.create', [
+            'categories' => $categories
+        ]);
     }
 
     /**
