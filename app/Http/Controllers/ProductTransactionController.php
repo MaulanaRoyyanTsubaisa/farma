@@ -13,6 +13,7 @@ class ProductTransactionController extends Controller
     public function index()
     {
         //
+        return view('admin.product_transaction.index');
     }
 
     /**
@@ -21,6 +22,7 @@ class ProductTransactionController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -37,6 +39,7 @@ class ProductTransactionController extends Controller
     public function show(ProductTransaction $productTransaction)
     {
         //
+        return view('admin.product_transaction.details');
     }
 
     /**

@@ -16,7 +16,7 @@
 
                 @forelse ($products as $product)
                     <div class="item-card flex flex-row justify-between items-center">
-                        <div class="flex flex-row items-center gap-x-3">
+                        <div class="flex flex-row items-center gap-x-5">
                             <img src="{{Storage::url($product->photo)}}" alt="" srcset="" class="w-[40px] h-[40px]">
                             <div>
                                 <h3 class="text-xl font-semibold text-indigo-950">
@@ -24,9 +24,9 @@
                                 </h3>
                                 <p class="text-base text-slate-500">Rp {{$product->price}}</p>
                             </div>
-                            <p class="text-base text-slate-500">{{$product->category->name}}</p>
 
                         </div>
+                        <p class="text-base text-slate-500 ">{{$product->category->name}}</p>
 
 
                         <div class="flex flex-row gap-x-5 items-center">

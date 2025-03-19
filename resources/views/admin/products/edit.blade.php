@@ -17,7 +17,7 @@
                        @endforeach
                 @endif
 
-                <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -40,7 +40,7 @@
                         <x-input-label for="category" :value="__('Category')" />
 
                         <select name="category_id" id="category_id" class="py-4  rounded-xl pl-3 w-full border border-slate-300">
-                            <option value="">Choose Product Category</option>
+                            <option value="{{$product->category->id}}">{{$product->category->name}}</option>
 
                             @forelse($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -63,7 +63,7 @@
                     <div class="mt-4">
                         <x-input-label for="photo" :value="__('photo')" />
                             <img src="{{Storage::url($product->photo)}}" alt="" srcset="" class="w-[40px] h-[40px]">
-                        <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photo"  autofocus autocomplete="photo" />
+                        <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photo" autofocus autocomplete="photo" />
                         <x-input-error :messages="$errors->get('photo')" class="mt-2" />
                     </div>
 
@@ -71,7 +71,7 @@
 
 
                         <x-primary-button class="ms-4">
-                            {{ __('Edit Products') }}
+                            {{ __('Update Products') }}
                         </x-primary-button>
                     </div>
                 </form>
