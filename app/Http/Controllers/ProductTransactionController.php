@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\ProductTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductTransactionController extends Controller
 {
@@ -13,7 +17,18 @@ class ProductTransactionController extends Controller
     public function index()
     {
         //
-        return view('admin.product_transaction.index');
+        $user = Auth::user();
+
+        if ($user->hasRole('buyer')) {
+            $product_transactions = $user->product_transactions()->orderBy('id', 'desc')->get();
+        } else {
+            $product_transactions = ProductTransaction::orderBy('id', 'desc')->get();
+        }
+
+
+        return view('admin.product_transaction.index', [
+            'product_transactions' => $product_transactions
+        ]);
     }
 
     /**
@@ -39,7 +54,10 @@ class ProductTransactionController extends Controller
     public function show(ProductTransaction $productTransaction)
     {
         //
-        return view('product_transaction.details');
+        $productTransaction = ProductTransaction::with('transactionDetails.product')->find($productTransaction->id);
+        return view('admin.product_transaction.details', [
+            'productTransaction' => $productTransaction
+        ]);
     }
 
     /**
@@ -56,6 +74,11 @@ class ProductTransactionController extends Controller
     public function update(Request $request, ProductTransaction $productTransaction)
     {
         //
+        $productTransaction->update([
+           'is_paid' => true,
+        ]);
+
+        return redirect()->back();
     }
 
     /**

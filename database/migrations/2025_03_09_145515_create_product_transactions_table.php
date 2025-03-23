@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('is_paid');
             $table->unsignedBigInteger('total_amount');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('note');
+            $table->text('notes');
             $table->timestamps();
         });
     }
