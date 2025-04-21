@@ -23,11 +23,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('product_transactions', ProductTransactionController::class)->middleware('role:owner|buyer');
 
     Route::resource('carts', CartController::class)->middleware('role:buyer');
-    Route::post('/carts/add/{productId}', [CartController::class, 'store'])->middleware('role:buyer')->name('carts.store');
+    Route::post('/cart/add/{productId}', [CartController::class, 'store'])->middleware('role:buyer')->name('carts.store');
 
+    Route::resource('product_transactions', ProductTransactionController::class)->middleware('role:owner|buyer');
     // Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
 
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 use App\Models\ProductTransaction;
+use App\Models\TransactionDetail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class ProductTransactionController extends Controller
@@ -46,6 +49,58 @@ class ProductTransactionController extends Controller
     public function store(Request $request)
     {
         //
+        $user = Auth::user();
+        $validated = $request->validate([
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'proof' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'note' => 'required|string|max:1000',
+            'post_code' => 'required|integer',
+            'phone_number' => 'required|integer',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $subTotalCents = 0;
+            $deliveryFeeCents = 10000 * 100;
+            $cartItems = $user->carts;
+            foreach ($cartItems as $item) {
+                $subTotalCents += $item->product->price * 100;
+            }
+            $taxCents = (int)round($subTotalCents * 0.1);
+            $insuranceCents = (int)round($subTotalCents * 0.23);
+            $grandTotalCents = $subTotalCents + $deliveryFeeCents + $taxCents + $insuranceCents;
+            $grandTotal = $grandTotalCents / 100;
+
+            $validated['user_id'] = $user->id;
+            $validated['total_amount'] = $grandTotal;
+            $validated["is_paid"] = false;
+
+            if ($request->hasFile('proof')) {
+                $proofPath = $request->file('proof')->store('payment_proofs', 'public');
+                $validated['proof'] = $proofPath;
+            }
+
+            $newTransaction = ProductTransaction::create($validated);
+
+            foreach ($cartItems as $item) {
+                TransactionDetail::create([
+                    'product_transaction_id' => $newTransaction->id,
+                    'product_id' => $item->product_id,
+                    'price' => $item->product->price,
+                ]);
+                $item->delete();
+            }
+            DB::commit();
+            return redirect()->route('product_transactions.index')->with('success', 'Transaction created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $error = ValidationException::withMessages([
+                'system_error' => ['system error: ' . $e->getMessage()],
+            ]);
+            throw $error;
+        }
     }
 
     /**
@@ -75,7 +130,7 @@ class ProductTransactionController extends Controller
     {
         //
         $productTransaction->update([
-           'is_paid' => true,
+            'is_paid' => true,
         ]);
 
         return redirect()->back();

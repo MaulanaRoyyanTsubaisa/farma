@@ -16,15 +16,16 @@
                 @forelse ($product_transactions as $transaction)
                     <div class="item-card flex flex-row justify-between items-center">
                         <div class="flex flex-row items-center gap-x-5">
-                            <div>
-                                <p class="text-base text-slate-500">Total Transaksi</p>
-                                <h3 class="text-xl font-semibold text-indigo-950">
-                                    RP {{ $transaction->total_amount }}
-                                </h3>
-                            </div>
-
+                            <a href="{{ route('product_transactions.show', $transaction) }}">
+                                <div>
+                                    <p class="text-base text-slate-500">Total Transaksi</p>
+                                    <h3 class="text-xl font-semibold text-indigo-950">
+                                        RP {{ $transaction->total_amount }}
+                                    </h3>
+                                </div>
+                            </a>
                         </div>
-                        <div>
+                        <div class="hidden md:flex flex-col     ">
                             <p class="text-base text-slate-500">Date</p>
                             <h3 class="text-xl font-semibold text-indigo-950">
                                 {{ $transaction->created_at }}
@@ -41,11 +42,12 @@
                             </span>
                         @endif
 
-                        <div class="flex flex-row gap-x-5 items-center">
+                        <div class="hidden md:flex flex-row gap-x-5 items-center">
                             <a href="{{ route('product_transactions.show', $transaction) }}"
                                 class=" py-3 px-5 text-white bg-blue-700 rounded-full">View Detail</a>
                         </div>
                     </div>
+
                     <hr class="my-3">
                 @empty
                     <p>Belum tersedia transaksi</p>

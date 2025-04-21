@@ -13,7 +13,7 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white flex flex-col gap-y-5 overflow-hidden p-10 shadow-sm sm:rounded-lg">
 
-                <div class="item-card flex flex-row justify-between items-center">
+                <div class="item-card gap-y-6 flex flex-col md:flex-row justify-between md:items-center">
                     <div class="flex flex-row items-center gap-x-5">
                         <div>
                             <p class="text-base text-slate-500">Total Transaksi</p>
@@ -46,7 +46,7 @@
                     list of items
                 </h3>
 
-                <div class="grid-cols-4 grid gap-x-10">
+                <div class="grid-cols-1 md:grid-cols-4 grid gap-x-10">
                     <div class="flex flex-col gap-y-5 col-span-2">
 
                         @forelse ($productTransaction->transactionDetails as $detail)
@@ -117,7 +117,8 @@
                         <form action="{{ route('product_transactions.update', $productTransaction) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="py-3 px-3 text-white bg-indigo-700 rounded-full">Contact Aadmin</button>
+                            <button type="submit" class="py-3 px-3 text-white bg-indigo-700 rounded-full">Contact
+                                Aadmin</button>
                         </form>
                     @else
                         <form action="{{ route('product_transactions.update', $productTransaction) }}" method="POST">
